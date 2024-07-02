@@ -215,7 +215,7 @@ BEGIN
     RETURN days_remaining;
 END$$
 
-DELIMITER;
+DELIMITER ;
 -- Usage
 SELECT days_until_deadline (1) AS days_remaining;
 
