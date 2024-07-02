@@ -119,6 +119,9 @@ WHERE
             deadline > '2024-10-31'
     );
 
+--8.List employees who are not currently team leads on any project.
+SELECT * FROM team_members WHERE is_lead = 0;
+
 
 --10. Display a message indicating if a project is overdue (deadline passed).
 SELECT
