@@ -136,13 +136,13 @@ WHERE
 
 --10. Display a message indicating if a project is overdue (deadline passed).
 SELECT
-    project_name,
+    ProjectName,
     deadline,
     CASE
         WHEN deadline < CURRENT_DATE THEN 'Overdue'
         ELSE 'Not overdue'
     END AS status
-FROM project;
+FROM projects;
 
 
 --11. Create a view to simplify retrieving client contact
