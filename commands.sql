@@ -65,3 +65,15 @@ INSERT INTO Employees (EmployeeID, EmployeeName) VALUES
 (4, 'Jane Doe'),
 (5, 'William Green'),
 (6, 'Sarah Jones');
+
+INSERT INTO TeamMembers (ProjectID, EmployeeID) VALUES
+ (1, 2),
+ (1, 6),
+ (2, 3),
+ (2, 4),
+ (3, 4),
+ (3, 5),
+ (4, 3),
+ (4, 6),
+ (5, 5),
+ (5, 6); 
