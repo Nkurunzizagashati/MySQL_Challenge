@@ -48,3 +48,11 @@ INSERT INTO Projects (ProjectID, ProjectName, Requirements, Deadline) VALUES
 (3, 'Social Media Management Tool', 'User-friendly interface with analytics', '2024-10-31'),
 (4, 'Inventory Management System', 'Barcode integration and real-time stock tracking', '2024-11-01'),
 (5, 'Restaurant Reservation System', 'Online booking with table management', '2024-09-01');
+
+-- INSETING DATA INTO CLIENT TABLE
+INSERT INTO Clients (ClientID, ClientName, ContactName, ContactEmail) VALUES
+(1, 'Big Retail Inc.', 'Peter Parker', 'peter.parker@example.com'),
+(2, 'EduTech Solutions', 'Walter White', 'walter.white@example.com'),
+(3, 'Trendsetters Inc.', 'Sandra Bullock', 'sandra.bullock@example.com'),
+(4, 'Gearhead Supply Co.', 'Daniel Craig', 'daniel.craig@example.com'),
+(5, 'Fine Dine Group', 'Olivia Rodriguez', 'olivia.rodriguez@example.com');
