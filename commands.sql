@@ -78,23 +78,22 @@ INSERT INTO TeamMembers (ProjectID, EmployeeID) VALUES
  (5, 5),
  (5, 6);
 
---  Find all projects with a deadline before December 1st, 2024
+--1 Find all projects with a deadline before December 1st, 2024
 SELECT * FROM Projects WHERE Deadline < '2024-12-01'; 
 
---1 List all projects for "Big Retail Inc." ordered by deadline
+--2 List all projects for "Big Retail Inc." ordered by deadline
 SELECT * FROM projects
 WHERE ProjectName = "Big Retail Inc."
-ORDER BY Deadline;
+ORDER BY Deadline DESC;
 
-
---2. List all projects for "Big Retail Inc." ordered by deadline.
-SELECT * FROM project WHERE client_id = 1 ORDER BY deadline DESC;
 
 --3. Find the team lead for the "Mobile App for Learning" project.
 SELECT * FROM team_members WHERE project_id = 2 AND is_lead = 1;
 
---4.Find projects containing "Management" in the name.
-SELECT * FROM project WHERE project_name LIKE '%Management%';
+--4.Finding projects containing "Management" in the name.
+SELECT * FROM projects
+WHERE ProjectName LIKE '%Management%'
+;
 
 
 --5.Count the number of projects assigned to David Lee.
