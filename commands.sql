@@ -76,4 +76,6 @@ INSERT INTO TeamMembers (ProjectID, EmployeeID) VALUES
  (4, 3),
  (4, 6),
  (5, 5),
- (5, 6); 
+ (5, 6);
+
+--  Find all projects with a deadline before December 1st, 2024
