@@ -149,20 +149,19 @@ FROM projects;
 CREATE VIEW ClientContact AS
 SELECT
     ClientID,
-    client_name,
-    contact_name
-FROM client;
+    ClientName,
+    ContactName
+FROM clients;
 
 
 --12. Create a view to show only ongoing projects (not yet completed).
 CREATE VIEW OnGoingProjects AS
 SELECT
     ProjectID,
-    project_name,
+    ProjectName,
     requirements,
-    deadline,
-    ClientID
-FROM project
+    deadline
+FROM projects
 WHERE
     deadline >= CURRENT_DATE;
 
