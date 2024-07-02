@@ -383,7 +383,7 @@ BEGIN
     SELECT COUNT(*)
     INTO is_valid_lead
     FROM employees
-    WHERE employee_id = NEW.employee_id;
+    WHERE EmployeeID = NEW.EmployeeID;
     
     -- If the team lead is not a valid employee, raise an error
     IF is_valid_lead = 0 THEN
@@ -406,25 +406,25 @@ SELECT
     c.client_name,
     COUNT(tm.employee_id) AS total_team_members
 FROM
-    project p
-    JOIN client c ON p.ClientID = c.ClientID
-    LEFT JOIN team_members tm ON p.ProjectID = tm.ProjectID
+    projects p
+    JOIN clients c ON p.ClientID = c.ClientID
+    LEFT JOIN teammembers tm ON p.ProjectID = tm.ProjectID
 GROUP BY
     p.ProjectID,
-    p.project_name,
+    p.ProjectName,
     p.requirements,
     p.deadline,
     p.ClientID,
-    c.client_name;
+    c.ClientName;
 
 SELECT * FROM Project_Details_With_Team_Members;
 
 
 --23.Create a view to show overdue projects with the number of days overdue
 CREATE VIEW Overdue_Projects AS
-SELECT p.ProjectID, p.project_name, p.requirements, p.deadline, p.ClientID, c.client_name, DATEDIFF(CURRENT_DATE, p.deadline) AS days_overdue
-FROM project p
-    JOIN client c ON p.ClientID = c.ClientID
+SELECT p.ProjectID, p.project_name, p.requirements, p.deadline, p.ClientID, c.ClientName, DATEDIFF(CURRENT_DATE, p.deadline) AS days_overdue
+FROM projects p
+    JOIN clients c ON p.ClientID = c.ClientID
 WHERE
     p.deadline < CURRENT_DATE;
 
@@ -440,7 +440,7 @@ CREATE PROCEDURE update_project_team (
 )
 BEGIN
     -- Remove existing team members
-    DELETE FROM team_members
+    DELETE FROM teammembers
     WHERE ProjectID = p_ProjectID;
 
     -- Declare variables for iterating through the JSON array
@@ -472,7 +472,7 @@ DELIMITER;
 DELIMITER $$
 
 CREATE TRIGGER prevent_project_deletion
-BEFORE DELETE ON project
+BEFORE DELETE ON projects
 FOR EACH ROW
 BEGIN
     DECLARE team_member_count INT;
@@ -480,7 +480,7 @@ BEGIN
     -- Count the number of team members assigned to the project
     SELECT COUNT(*)
     INTO team_member_count
-    FROM team_members
+    FROM teammembers
     WHERE ProjectID = OLD.ProjectID;
 
     -- If there are any team members assigned, prevent the deletion
