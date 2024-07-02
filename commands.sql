@@ -88,7 +88,7 @@ ORDER BY Deadline DESC;
 
 
 --3. Find the team lead for the "Mobile App for Learning" project.
-SELECT * FROM team_members WHERE project_id = 2 AND is_lead = 1;
+SELECT * FROM team_members WHERE ProjectID = 2 AND is_lead = 1;
 
 --4.Finding projects containing "Management" in the name.
 SELECT * FROM projects
@@ -101,18 +101,18 @@ SELECT COUNT(*) FROM teammembers WHERE EmployeeId = 1;
 
 
 --6 Find the total number of employees working on each project.
-SELECT project_id, COUNT(employee_id)
-FROM team_members
+SELECT ProjectID, COUNT(EmployeeId)
+FROM teammembers
 GROUP BY
-    project_id;
+    ProjectID;
 
 
 --7. Find all clients with projects having a deadline after October 31st, 2024.
 SELECT client_name
 FROM client
 WHERE
-    client_id IN (
-        SELECT client_id
+    ClientID IN (
+        SELECT ClientID
         FROM project
         WHERE
             deadline > '2024-10-31'
@@ -148,7 +148,7 @@ FROM project;
 --11. Create a view to simplify retrieving client contact
 CREATE VIEW ClientContact AS
 SELECT
-    client_id,
+    ClientID,
     client_name,
     contact_name
 FROM client;
@@ -157,11 +157,11 @@ FROM client;
 --12. Create a view to show only ongoing projects (not yet completed).
 CREATE VIEW OnGoingProjects AS
 SELECT
-    project_id,
+    ProjectID,
     project_name,
     requirements,
     deadline,
-    client_id
+    ClientID
 FROM project
 WHERE
     deadline >= CURRENT_DATE;
@@ -173,21 +173,21 @@ FROM
     team_members
     JOIN employees ON team_members.employee_id = employees.employee_id
     AND team_members.is_lead = 1
-    JOIN project ON team_members.project_id = project.project_id;
+    JOIN project ON team_members.ProjectID = project.ProjectID;
 
 
 --14.Create a view to show project names and client contact information for projects with a deadline in November 2024.
 CREATE OR REPLACE VIEW Project_Client_November AS
 SELECT project.project_name, project.deadline, client.contact_name, client.client_name
 FROM project
-    JOIN client ON project.client_id = client.client_id
+    JOIN client ON project.ClientID = client.ClientID
 WHERE
     deadline BETWEEN '2024-11-01' AND '2024-11-30';
 
 
 --15. Create a view to display the total number of projects assigned to each employee.
 CREATE OR REPLACE VIEW Employee_Project_Count AS
-SELECT employees.employee_id, employees.employee_name, COUNT(team_members.project_id) AS projects_assigned
+SELECT employees.employee_id, employees.employee_name, COUNT(team_members.ProjectID) AS projects_assigned
 FROM employees
     JOIN team_members ON team_members.employee_id = employees.employee_id
 GROUP BY
@@ -199,7 +199,7 @@ GROUP BY
 -- 16. Create a function to calculate the number of days remaining until a project deadline.
 DELIMITER $$
 
-CREATE FUNCTION days_until_deadline(project_id INT) 
+CREATE FUNCTION days_until_deadline(ProjectID INT) 
 RETURNS INT DETERMINISTIC
 BEGIN
     DECLARE deadline DATE;
@@ -208,7 +208,7 @@ BEGIN
     -- Get the project deadline
     SELECT p.deadline INTO deadline
     FROM project p
-    WHERE p.project_id = project_id;
+    WHERE p.ProjectID = ProjectID;
 
     -- Calculate the number of days remaining
     SET days_remaining = DATEDIFF(deadline, CURRENT_DATE);
@@ -225,7 +225,7 @@ SELECT days_until_deadline (1) AS days_remaining;
 -- 17. Create a function to calculate the number of days a project is overdue
 DELIMITER $$
 
-CREATE FUNCTION days_overdue(project_id INT) 
+CREATE FUNCTION days_overdue(ProjectID INT) 
 RETURNS INT DETERMINISTIC
 BEGIN
     DECLARE deadline DATE;
@@ -234,7 +234,7 @@ BEGIN
     -- Get the project deadline
     SELECT p.deadline INTO deadline
     FROM project p
-    WHERE p.project_id = project_id;
+    WHERE p.ProjectID = ProjectID;
 
     -- Calculate the number of days overdue
     SET overdue_days = DATEDIFF(CURRENT_DATE, deadline);
@@ -264,25 +264,25 @@ CREATE PROCEDURE add_client_project(
     IN deadline DATE
 )
 BEGIN
-    DECLARE client_id INT;
-    DECLARE project_id INT;
+    DECLARE ClientID INT;
+    DECLARE ProjectID INT;
     
     -- Add client
     INSERT INTO client (client_name, contact_name)
     VALUES (client_name, contact_name);
     
-    -- Get the client_id of the newly added client
-    SET client_id = LAST_INSERT_ID();
+    -- Get the ClientID of the newly added client
+    SET ClientID = LAST_INSERT_ID();
     
     -- Add project
-    INSERT INTO project (project_name, requirements, deadline, client_id)
-    VALUES (project_name, requirements, deadline, client_id);
+    INSERT INTO project (project_name, requirements, deadline, ClientID)
+    VALUES (project_name, requirements, deadline, ClientID);
     
-    -- Get the project_id of the newly added project
-    SET project_id = LAST_INSERT_ID();
+    -- Get the ProjectID of the newly added project
+    SET ProjectID = LAST_INSERT_ID();
     
-    -- Return the project_id
-    SELECT project_id, client_id,  project_name, client_name;
+    -- Return the ProjectID
+    SELECT ProjectID, ClientID,  project_name, client_name;
     
 END$$
 
@@ -299,24 +299,24 @@ CALL add_client_project (
 
 --19. Create a stored procedure to move completed projects (past deadlines) to an archive table
 CREATE TABLE IF NOT EXISTS archived_projects (
-    project_id INT PRIMARY KEY,
+    ProjectID INT PRIMARY KEY,
     project_name VARCHAR(255),
     requirements TEXT,
     deadline DATE,
-    client_id INT,
+    ClientID INT,
     archived_date DATE
 );
 
 ALTER TABLE archived_projects
-ADD CONSTRAINT fk_archiveclient FOREIGN KEY (client_id) REFERENCES client (client_id);
+ADD CONSTRAINT fk_archiveclient FOREIGN KEY (ClientID) REFERENCES client (ClientID);
 
 DELIMITER $$
 
 CREATE PROCEDURE archive_completed_projects()
 BEGIN
     -- Insert completed projects into the archive table
-    INSERT INTO archived_projects (project_id, project_name, requirements, deadline, client_id, archived_date)
-    SELECT project_id, project_name, requirements, deadline, client_id, CURRENT_DATE
+    INSERT INTO archived_projects (ProjectID, project_name, requirements, deadline, ClientID, archived_date)
+    SELECT ProjectID, project_name, requirements, deadline, ClientID, CURRENT_DATE
     FROM project
     WHERE deadline < CURRENT_DATE;
 
@@ -334,15 +334,15 @@ CALL archive_completed_projects ();
 --20. Create a trigger to log any updates made to project records in a separate table for auditing purposes
 CREATE TABLE IF NOT EXISTS project_audit (
     audit_id INT PRIMARY KEY AUTO_INCREMENT,
-    project_id INT,
+    ProjectID INT,
     old_project_name VARCHAR(255),
     new_project_name VARCHAR(255),
     old_requirements TEXT,
     new_requirements TEXT,
     old_deadline DATE,
     new_deadline DATE,
-    old_client_id INT,
-    new_client_id INT,
+    old_ClientID INT,
+    new_ClientID INT,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -353,18 +353,18 @@ AFTER UPDATE ON project
 FOR EACH ROW
 BEGIN
     INSERT INTO project_audit (
-        project_id, 
+        ProjectID, 
         old_project_name, new_project_name,
         old_requirements, new_requirements,
         old_deadline, new_deadline,
-        old_client_id, new_client_id
+        old_ClientID, new_ClientID
        
     ) VALUES (
-        OLD.project_id, 
+        OLD.ProjectID, 
         OLD.project_name, NEW.project_name,
         OLD.requirements, NEW.requirements,
         OLD.deadline, NEW.deadline,
-        OLD.client_id, NEW.client_id
+        OLD.ClientID, NEW.ClientID
      
     );
 END$$
@@ -400,23 +400,23 @@ DELIMITER;
 --22.Create a view to display project details along with the total number of team members assigned
 CREATE VIEW Project_Details_With_Team_Members AS
 SELECT
-    p.project_id,
+    p.ProjectID,
     p.project_name,
     p.requirements,
     p.deadline,
-    p.client_id,
+    p.ClientID,
     c.client_name,
     COUNT(tm.employee_id) AS total_team_members
 FROM
     project p
-    JOIN client c ON p.client_id = c.client_id
-    LEFT JOIN team_members tm ON p.project_id = tm.project_id
+    JOIN client c ON p.ClientID = c.ClientID
+    LEFT JOIN team_members tm ON p.ProjectID = tm.ProjectID
 GROUP BY
-    p.project_id,
+    p.ProjectID,
     p.project_name,
     p.requirements,
     p.deadline,
-    p.client_id,
+    p.ClientID,
     c.client_name;
 
 SELECT * FROM Project_Details_With_Team_Members;
@@ -424,9 +424,9 @@ SELECT * FROM Project_Details_With_Team_Members;
 
 --23.Create a view to show overdue projects with the number of days overdue
 CREATE VIEW Overdue_Projects AS
-SELECT p.project_id, p.project_name, p.requirements, p.deadline, p.client_id, c.client_name, DATEDIFF(CURRENT_DATE, p.deadline) AS days_overdue
+SELECT p.ProjectID, p.project_name, p.requirements, p.deadline, p.ClientID, c.client_name, DATEDIFF(CURRENT_DATE, p.deadline) AS days_overdue
 FROM project p
-    JOIN client c ON p.client_id = c.client_id
+    JOIN client c ON p.ClientID = c.ClientID
 WHERE
     p.deadline < CURRENT_DATE;
 
@@ -437,13 +437,13 @@ SELECT * FROM Overdue_Projects;
 DELIMITER $$
 
 CREATE PROCEDURE update_project_team (
-    IN p_project_id INT,
+    IN p_ProjectID INT,
     IN new_team_members JSON
 )
 BEGIN
     -- Remove existing team members
     DELETE FROM team_members
-    WHERE project_id = p_project_id;
+    WHERE ProjectID = p_ProjectID;
 
     -- Declare variables for iterating through the JSON array
     DECLARE i INT DEFAULT 0;
@@ -459,8 +459,8 @@ BEGIN
         SET member_id = JSON_UNQUOTE(JSON_EXTRACT(new_team_members, CONCAT('$[', i, '].employee_id')));
         SET is_lead = JSON_UNQUOTE(JSON_EXTRACT(new_team_members, CONCAT('$[', i, '].is_lead')));
 
-        INSERT INTO team_members (project_id, employee_id, is_lead)
-        VALUES (p_project_id, member_id, is_lead);
+        INSERT INTO team_members (ProjectID, employee_id, is_lead)
+        VALUES (p_ProjectID, member_id, is_lead);
 
         SET i = i + 1;
     END WHILE;
@@ -483,7 +483,7 @@ BEGIN
     SELECT COUNT(*)
     INTO team_member_count
     FROM team_members
-    WHERE project_id = OLD.project_id;
+    WHERE ProjectID = OLD.ProjectID;
 
     -- If there are any team members assigned, prevent the deletion
     IF team_member_count > 0 THEN
