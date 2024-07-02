@@ -206,7 +206,7 @@ BEGIN
     
     -- Get the project deadline
     SELECT p.deadline INTO deadline
-    FROM project p
+    FROM projects p
     WHERE p.ProjectID = ProjectID;
 
     -- Calculate the number of days remaining
