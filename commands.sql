@@ -88,7 +88,7 @@ ORDER BY Deadline DESC;
 
 
 --3. Find the team lead for the "Mobile App for Learning" project.
-SELECT * FROM team_members WHERE ProjectID = 2 AND is_lead = 1;
+SELECT * FROM teammembers WHERE ProjectID = 2 AND is_lead = 1;
 
 --4.Finding projects containing "Management" in the name.
 SELECT * FROM projects
@@ -167,12 +167,12 @@ WHERE
 
 --13. Create a view to display project information along with assigned team leads.
 CREATE VIEW ProjectInformation AS
-SELECT employees.employee_name, project.project_name, project.deadline
+SELECT employees.EmployeeName, projects.ProjectName, projects.deadline
 FROM
-    team_members
-    JOIN employees ON team_members.employee_id = employees.employee_id
-    AND team_members.is_lead = 1
-    JOIN project ON team_members.ProjectID = project.ProjectID;
+    teammembers
+    JOIN employees ON teammembers.EmployeeID = employees.EmployeeID
+    AND teammembers.is_lead = 1
+    JOIN projects ON teammembers.ProjectID = projects.ProjectID;
 
 
 --14.Create a view to show project names and client contact information for projects with a deadline in November 2024.
