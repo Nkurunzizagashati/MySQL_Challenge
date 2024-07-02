@@ -80,3 +80,8 @@ INSERT INTO TeamMembers (ProjectID, EmployeeID) VALUES
 
 --  Find all projects with a deadline before December 1st, 2024
 SELECT * FROM Projects WHERE Deadline < '2024-12-01';
+
+-- List all projects for "Big Retail Inc." ordered by deadline
+SELECT * FROM projects
+WHERE ProjectName = "Big Retail Inc."
+ORDER BY Deadline;
