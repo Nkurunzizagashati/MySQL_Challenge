@@ -257,9 +257,9 @@ LIMIT 0, 1000;
 DELIMITER $$
 
 CREATE PROCEDURE add_client_project(
-    IN client_name VARCHAR(255),
-    IN contact_name VARCHAR(255),
-    IN project_name VARCHAR(255),
+    IN ClientName VARCHAR(255),
+    IN ContactName VARCHAR(255),
+    IN ProjectName VARCHAR(255),
     IN requirements TEXT,
     IN deadline DATE
 )
@@ -268,33 +268,25 @@ BEGIN
     DECLARE ProjectID INT;
     
     -- Add client
-    INSERT INTO client (client_name, contact_name)
-    VALUES (client_name, contact_name);
+    INSERT INTO clients (ClientName, ContactName)
+    VALUES (ClientName, ContactName);
     
     -- Get the ClientID of the newly added client
     SET ClientID = LAST_INSERT_ID();
     
     -- Add project
-    INSERT INTO project (project_name, requirements, deadline, ClientID)
-    VALUES (project_name, requirements, deadline, ClientID);
+    INSERT INTO projects (ProjectName, requirements, deadline, ClientID)
+    VALUES (ProjectName, requirements, deadline, ClientID);
     
     -- Get the ProjectID of the newly added project
     SET ProjectID = LAST_INSERT_ID();
     
     -- Return the ProjectID
-    SELECT ProjectID, ClientID,  project_name, client_name;
+    SELECT ProjectID, ClientID,  ProjectName, ClientName;
     
 END$$
 
 DELIMITER;
-
-CALL add_client_project (
-    'Boris Nyilindekwe', -- client_name
-    'African Leadership University', -- contact_name
-    'ALU Project', -- project_name
-    'Complete all queries in the ALU project', -- requirements
-    '2024-07-01' -- deadline
-);
 
 
 --19. Create a stored procedure to move completed projects (past deadlines) to an archive table
