@@ -97,6 +97,10 @@ SELECT * FROM team_members WHERE project_id = 2 AND is_lead = 1;
 SELECT * FROM project WHERE project_name LIKE '%Management%';
 
 
+--5.Count the number of projects assigned to David Lee.
+SELECT COUNT(*) FROM team_members WHERE employee_id = 1;
+
+
 --10. Display a message indicating if a project is overdue (deadline passed).
 SELECT
     project_name,
