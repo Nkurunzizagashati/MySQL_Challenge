@@ -90,6 +90,12 @@ ORDER BY Deadline;
 --2. List all projects for "Big Retail Inc." ordered by deadline.
 SELECT * FROM project WHERE client_id = 1 ORDER BY deadline DESC;
 
+--3. Find the team lead for the "Mobile App for Learning" project.
+SELECT * FROM team_members WHERE project_id = 2 AND is_lead = 1;
+
+--4.Find projects containing "Management" in the name.
+SELECT * FROM project WHERE project_name LIKE '%Management%';
+
 
 --10. Display a message indicating if a project is overdue (deadline passed).
 SELECT
