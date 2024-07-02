@@ -101,6 +101,13 @@ SELECT * FROM project WHERE project_name LIKE '%Management%';
 SELECT COUNT(*) FROM team_members WHERE employee_id = 1;
 
 
+--6 Find the total number of employees working on each project.
+SELECT project_id, COUNT(employee_id)
+FROM team_members
+GROUP BY
+    project_id;
+
+
 --10. Display a message indicating if a project is overdue (deadline passed).
 SELECT
     project_name,
