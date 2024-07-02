@@ -108,6 +108,18 @@ GROUP BY
     project_id;
 
 
+--7. Find all clients with projects having a deadline after October 31st, 2024.
+SELECT client_name
+FROM client
+WHERE
+    client_id IN (
+        SELECT client_id
+        FROM project
+        WHERE
+            deadline > '2024-10-31'
+    );
+
+
 --10. Display a message indicating if a project is overdue (deadline passed).
 SELECT
     project_name,
