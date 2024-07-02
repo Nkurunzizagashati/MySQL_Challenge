@@ -186,12 +186,12 @@ WHERE
 
 --15. Create a view to display the total number of projects assigned to each employee.
 CREATE OR REPLACE VIEW Employee_Project_Count AS
-SELECT employees.employee_id, employees.employee_name, COUNT(team_members.ProjectID) AS projects_assigned
+SELECT employees.EmployeeID, employees.EmployeeName, COUNT(teammembers.ProjectID) AS projects_assigned
 FROM employees
-    JOIN team_members ON team_members.employee_id = employees.employee_id
+    JOIN teammembers ON teammembers.EmployeeID = employees.EmployeeID
 GROUP BY
-    employees.employee_id,
-    employees.employee_name;
+    employees.EmployeeID,
+    employees.EmployeeName;
 
 
 
