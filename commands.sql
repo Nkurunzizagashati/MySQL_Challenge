@@ -347,7 +347,7 @@ CREATE TABLE IF NOT EXISTS project_audit (
 DELIMITER $$
 
 CREATE TRIGGER trg_project_update
-AFTER UPDATE ON project
+AFTER UPDATE ON projects
 FOR EACH ROW
 BEGIN
     INSERT INTO project_audit (
@@ -367,7 +367,7 @@ BEGIN
     );
 END$$
 
-DELIMITER;
+DELIMITER ;
 
 
 -- 21. Create a trigger to ensure a team lead assigned to a project is a valid employee
