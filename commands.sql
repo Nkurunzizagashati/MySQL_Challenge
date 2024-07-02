@@ -56,3 +56,12 @@ INSERT INTO Clients (ClientID, ClientName, ContactName, ContactEmail) VALUES
 (3, 'Trendsetters Inc.', 'Sandra Bullock', 'sandra.bullock@example.com'),
 (4, 'Gearhead Supply Co.', 'Daniel Craig', 'daniel.craig@example.com'),
 (5, 'Fine Dine Group', 'Olivia Rodriguez', 'olivia.rodriguez@example.com');
+
+
+INSERT INTO Employees (EmployeeID, EmployeeName) VALUES
+(1, 'Alice Brown'),
+(2, 'David Lee'),
+(3, 'Michael Young'),
+(4, 'Jane Doe'),
+(5, 'William Green'),
+(6, 'Sarah Jones');
