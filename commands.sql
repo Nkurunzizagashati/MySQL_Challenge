@@ -232,7 +232,7 @@ BEGIN
 
     -- Get the project deadline
     SELECT p.deadline INTO deadline
-    FROM project p
+    FROM projects p
     WHERE p.ProjectID = ProjectID;
 
     -- Calculate the number of days overdue
@@ -246,10 +246,11 @@ BEGIN
     RETURN overdue_days;
 END$$
 
-DELIMITER;
+DELIMITER ;
 
 -- Usage
-SELECT days_overdue (1) AS overdue_days;
+SELECT days_overdue(1) AS overdue_days
+LIMIT 0, 1000;
 
 
 --18. Create a stored procedure to add a new client and their first project in one call
