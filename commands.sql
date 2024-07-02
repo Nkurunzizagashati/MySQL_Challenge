@@ -108,18 +108,18 @@ GROUP BY
 
 
 --7. Find all clients with projects having a deadline after October 31st, 2024.
-SELECT client_name
-FROM client
+SELECT ClientName
+FROM clients
 WHERE
     ClientID IN (
         SELECT ClientID
-        FROM project
+        FROM projects
         WHERE
             deadline > '2024-10-31'
     );
 
 --8.List employees who are not currently team leads on any project.
-SELECT * FROM team_members WHERE is_lead = 0;
+SELECT * FROM teammembers WHERE is_lead = 0;
 
 
 --9. Combine a list of projects with deadlines before December 1st and another list with "Management" in the project name
