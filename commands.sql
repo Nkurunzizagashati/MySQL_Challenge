@@ -40,3 +40,11 @@ CREATE TABLE ProjectTeam (
     FOREIGN KEY (ProjectID) REFERENCES Projects(ProjectID),
     FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID)
 );
+
+
+INSERT INTO Projects (ProjectID, ProjectName, Requirements, Deadline) VALUES
+(1, 'E-commerce Platform', 'Extensive documentation', '2024-12-01'),
+(2, 'Mobile App for Learning', 'Gamified learning modules', '2024-08-15'),
+(3, 'Social Media Management Tool', 'User-friendly interface with analytics', '2024-10-31'),
+(4, 'Inventory Management System', 'Barcode integration and real-time stock tracking', '2024-11-01'),
+(5, 'Restaurant Reservation System', 'Online booking with table management', '2024-09-01');
