@@ -290,37 +290,43 @@ DELIMITER;
 
 
 --19. Create a stored procedure to move completed projects (past deadlines) to an archive table
+-- Create the archived_projects table if it does not exist
 CREATE TABLE IF NOT EXISTS archived_projects (
     ProjectID INT PRIMARY KEY,
-    project_name VARCHAR(255),
+    ProjectName VARCHAR(255),
     requirements TEXT,
     deadline DATE,
     ClientID INT,
     archived_date DATE
 );
 
+-- Add foreign key constraint
 ALTER TABLE archived_projects
-ADD CONSTRAINT fk_archiveclient FOREIGN KEY (ClientID) REFERENCES client (ClientID);
+ADD CONSTRAINT fk_archiveclient FOREIGN KEY (ClientID) REFERENCES clients (ClientID);
 
+-- Change delimiter
 DELIMITER $$
 
+-- Create stored procedure for archiving completed projects
 CREATE PROCEDURE archive_completed_projects()
 BEGIN
     -- Insert completed projects into the archive table
-    INSERT INTO archived_projects (ProjectID, project_name, requirements, deadline, ClientID, archived_date)
-    SELECT ProjectID, project_name, requirements, deadline, ClientID, CURRENT_DATE
-    FROM project
+    INSERT INTO archived_projects (ProjectID, ProjectName, requirements, deadline, ClientID, archived_date)
+    SELECT ProjectID, ProjectName, requirements, deadline, ClientID, CURRENT_DATE
+    FROM projects
     WHERE deadline < CURRENT_DATE;
 
     -- Delete the completed projects from the original table
-    DELETE FROM project
+    DELETE FROM projects
     WHERE deadline < CURRENT_DATE;
 END$$
 
-DELIMITER;
+-- Reset delimiter
+DELIMITER ;
 
 -- Usage
-CALL archive_completed_projects ();
+CALL archive_completed_projects();
+
 
 
 --20. Create a trigger to log any updates made to project records in a separate table for auditing purposes
