@@ -175,3 +175,12 @@ FROM
     JOIN employees ON team_members.employee_id = employees.employee_id
     AND team_members.is_lead = 1
     JOIN project ON team_members.project_id = project.project_id;
+
+
+--14.Create a view to show project names and client contact information for projects with a deadline in November 2024.
+CREATE OR REPLACE VIEW Project_Client_November AS
+SELECT project.project_name, project.deadline, client.contact_name, client.client_name
+FROM project
+    JOIN client ON project.client_id = client.client_id
+WHERE
+    deadline BETWEEN '2024-11-01' AND '2024-11-30';
