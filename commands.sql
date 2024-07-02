@@ -97,7 +97,7 @@ WHERE ProjectName LIKE '%Management%'
 
 
 --5.Count the number of projects assigned to David Lee.
-SELECT COUNT(*) FROM team_members WHERE employee_id = 1;
+SELECT COUNT(*) FROM teammembers WHERE EmployeeId = 1;
 
 
 --6 Find the total number of employees working on each project.
